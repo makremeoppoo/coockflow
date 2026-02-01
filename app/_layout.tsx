@@ -1,10 +1,10 @@
+import BackgroundPattern from "@/components/BackgroundPattern";
+import useAuthStore from "@/store/auth.store";
+import * as Sentry from '@sentry/react-native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, Image, View } from 'react-native';
-
-import useAuthStore from "@/store/auth.store";
-import * as Sentry from '@sentry/react-native';
 import './globals.css';
 
 Sentry.init({
@@ -56,7 +56,12 @@ export default Sentry.wrap(function RootLayout() {
     );
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <View style={{ flex: 1 }}>
+      <BackgroundPattern />
+      <Stack screenOptions={{ headerShown: false }} />
+    </View>
+  );
 });
 
 Sentry.showFeedbackWidget();
