@@ -1,6 +1,7 @@
 import BackgroundPattern from "@/components/BackgroundPattern";
 import EmptyState from "@/components/EmptyState";
 import RecipeCard from "@/components/RecipeCard";
+import { useScrollToHideTabBar, useTabBarVisibility } from "@/context/TabBarVisibilityContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -59,6 +60,8 @@ function AnimatedCard({
 
 export default function Index() {
   const router = useRouter();
+  const { onScroll } = useScrollToHideTabBar();
+  const { setVisible } = useTabBarVisibility();
   const [recipes, setRecipes] = useState<any[]>([]);
   const [addedRecipes, setAddedRecipes] = useState<string[]>([]);
 
@@ -77,8 +80,9 @@ export default function Index() {
 
   useFocusEffect(
     useCallback(() => {
+      setVisible(true);
       loadData();
-    }, [loadData])
+    }, [loadData, setVisible])
   );
 
   const handleDeleteRecipe = async (id: string) => {
@@ -135,6 +139,8 @@ export default function Index() {
         style={styles.scrollArea}
         contentContainerStyle={{ paddingBottom: 32 }}
         showsVerticalScrollIndicator={false}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
       >
       <BackgroundPattern />
       <View style={styles.pageHeader}>

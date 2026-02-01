@@ -2,6 +2,7 @@ import {
   GroceryCategorySection,
   GroceryListHeader,
 } from "@/components/grocery";
+import { useScrollToHideTabBar, useTabBarVisibility } from "@/context/TabBarVisibilityContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -18,6 +19,8 @@ function groupByCategory(list: any[]): Record<string, any[]> {
 }
 
 export default function Search() {
+  const { onScroll } = useScrollToHideTabBar();
+  const { setVisible } = useTabBarVisibility();
   const [groceryList, setGroceryList] = useState<any[]>([]);
 
   const loadData = useCallback(async () => {
@@ -31,8 +34,9 @@ export default function Search() {
 
   useFocusEffect(
     useCallback(() => {
+      setVisible(true);
       loadData();
-    }, [loadData])
+    }, [loadData, setVisible])
   );
 
   const toggleItem = useCallback(
@@ -54,6 +58,8 @@ export default function Search() {
       style={styles.scrollArea}
       contentContainerStyle={{ paddingBottom: 32 }}
       showsVerticalScrollIndicator={false}
+      onScroll={onScroll}
+      scrollEventThrottle={16}
     >
       <GroceryListHeader
           totalCount={groceryList.length}

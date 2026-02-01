@@ -10,7 +10,7 @@ interface EmptyStateProps {
 export default function EmptyState({ onExplore }: EmptyStateProps) {
   return (
     <View style={styles.emptyState}>
-      <View style={{ marginBottom: 4 }}>
+      <View style={styles.emptyIconWrap}>
         <Ionicons name="restaurant-outline" size={56} color={COLORS.orangeLight} />
       </View>
       <Text style={styles.emptyText}>No recipes yet</Text>

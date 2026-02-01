@@ -1,5 +1,9 @@
 import { COLORS, images } from "@/constants";
+import { TabBarVisibilityProvider, useTabBarVisibility } from "@/context/TabBarVisibilityContext";
 import { TabBarIconProps } from "@/type";
+import { Ionicons } from "@expo/vector-icons";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { BottomTabBar } from "@react-navigation/bottom-tabs";
 import { Tabs } from "expo-router";
 import { useEffect, useRef } from "react";
 import {
@@ -7,9 +11,14 @@ import {
   Image,
   Platform,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import styles from "../styles";
+
+const FAB_SIZE = 56;
+const FAB_BOTTOM = 28;
+const FAB_RIGHT = 20;
 
 const TabBarIcon = ({ focused, icon, title }: TabBarIconProps) => {
   const scale = useRef(new Animated.Value(1)).current;
@@ -68,7 +77,84 @@ const tabBarStyle = {
   paddingTop: 8,
 };
 
-export default function TabLayout() {
+const TAB_BAR_HEIGHT = 72 + 28;
+
+function TabLayoutContent() {
+  const { visible, setVisible } = useTabBarVisibility();
+  const translateY = useRef(new Animated.Value(0)).current;
+  const fabOpacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(translateY, {
+      toValue: visible ? 0 : TAB_BAR_HEIGHT,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [visible, translateY]);
+
+  useEffect(() => {
+    Animated.timing(fabOpacity, {
+      toValue: visible ? 0 : 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, [visible, fabOpacity]);
+
+  const tabBar = (props: BottomTabBarProps) => (
+    <View
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: TAB_BAR_HEIGHT + 20,
+      }}
+      pointerEvents="box-none"
+    >
+      <Animated.View
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          transform: [{ translateY }],
+        }}
+        pointerEvents={visible ? "auto" : "none"}
+      >
+        <BottomTabBar {...props} />
+      </Animated.View>
+      <Animated.View
+        style={{
+          position: "absolute",
+          right: FAB_RIGHT,
+          bottom: FAB_BOTTOM,
+          opacity: fabOpacity,
+        }}
+        pointerEvents={visible ? "none" : "auto"}
+      >
+        <TouchableOpacity
+          onPress={() => setVisible(true)}
+          activeOpacity={0.85}
+          style={{
+            width: FAB_SIZE,
+            height: FAB_SIZE,
+            borderRadius: FAB_SIZE / 2,
+            backgroundColor: COLORS.orange,
+            alignItems: "center",
+            justifyContent: "center",
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.2,
+            shadowRadius: 8,
+            elevation: 8,
+          }}
+        >
+          <Ionicons name="menu" size={28} color="#fff" />
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
+  );
+
   return (
     <Tabs
       screenOptions={{
@@ -78,6 +164,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: COLORS.orange,
         tabBarInactiveTintColor: COLORS.textMuted,
       }}
+      tabBar={tabBar}
     >
       <Tabs.Screen
         name="index"
@@ -107,5 +194,13 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+  );
+}
+
+export default function TabLayout() {
+  return (
+    <TabBarVisibilityProvider>
+      <TabLayoutContent />
+    </TabBarVisibilityProvider>
   );
 }

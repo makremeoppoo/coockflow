@@ -230,6 +230,28 @@ const styles = StyleSheet.create({
     actionBtnSecondary: {
       backgroundColor: '#F4F4F5',
     },
+
+    // Empty State
+    emptyState: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 48,
+      paddingHorizontal: 24,
+    },
+    emptyIconWrap: {
+      marginBottom: 4,
+    },
+    emptyText: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: COLORS.textSub,
+      marginBottom: 8,
+    },
+    emptyLink: {
+      fontSize: 15,
+      fontWeight: '600',
+      color: COLORS.orange,
+    },
   
     // ── GROCERY ──
     clearChecked: {

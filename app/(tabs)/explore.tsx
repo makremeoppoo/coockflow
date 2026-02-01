@@ -1,3 +1,4 @@
+import { useScrollToHideTabBar, useTabBarVisibility } from "@/context/TabBarVisibilityContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -30,6 +31,8 @@ const FEATURES = [
 ];
 
 export default function Discover() {
+  const { onScroll } = useScrollToHideTabBar();
+  const { setVisible } = useTabBarVisibility();
   const [videoUrl, setVideoUrl] = useState("");
   const [isExtracting, setIsExtracting] = useState(false);
   const [savedRecipes, setSavedRecipes] = useState<any[]>([]);
@@ -45,8 +48,9 @@ export default function Discover() {
 
   useFocusEffect(
     useCallback(() => {
+      setVisible(true);
       loadRecipes();
-    }, [loadRecipes])
+    }, [loadRecipes, setVisible])
   );
 
   const saveToStorage = useCallback(async (key: string, data: any) => {
@@ -112,6 +116,8 @@ export default function Discover() {
         style={styles.scrollArea}
         contentContainerStyle={{ paddingBottom: 32 }}
         showsVerticalScrollIndicator={false}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
       >
         <BackgroundPattern />
         <DiscoverPageHeader />
