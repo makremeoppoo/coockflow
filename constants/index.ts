@@ -60,5 +60,6 @@ export const COLORS = {
     redLight: '#FEF2F2',
     blue: '#3B82F6',
     blueLight: '#EFF6FF',
+    
   };
   

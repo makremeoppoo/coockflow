@@ -1,10 +1,11 @@
 import BackgroundPattern from "@/components/BackgroundPattern";
-import * as Sentry from '@sentry/react-native';
-import { useFonts } from 'expo-font';
+import { PremiumProvider } from "@/context/PremiumContext";
+import * as Sentry from "@sentry/react-native";
+import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
-import { ActivityIndicator, Image, View } from 'react-native';
-import './globals.css';
+import { ActivityIndicator, Image, View } from "react-native";
+import "./globals.css";
 
 Sentry.init({
   dsn: 'https://94edd17ee98a307f2d85d750574c454a@o4506876178464768.ingest.us.sentry.io/4509588544094208',
@@ -52,10 +53,12 @@ export default Sentry.wrap(function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <BackgroundPattern />
-      <Stack screenOptions={{ headerShown: false }} />
-    </View>
+    <PremiumProvider>
+      <View style={{ flex: 1 }}>
+        <BackgroundPattern />
+        <Stack screenOptions={{ headerShown: false }} />
+      </View>
+    </PremiumProvider>
   );
 });
 

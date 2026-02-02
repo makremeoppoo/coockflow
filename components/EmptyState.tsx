@@ -9,14 +9,17 @@ interface EmptyStateProps {
 
 export default function EmptyState({ onExplore }: EmptyStateProps) {
   return (
-    <View style={styles.emptyState}>
-      <View style={styles.emptyIconWrap}>
-        <Ionicons name="restaurant-outline" size={56} color={COLORS.orangeLight} />
+    <View style={styles.card}>
+      <View style={styles.emptyState}>
+        <View style={styles.emptyIconWrap}>
+          <Ionicons name="restaurant-outline" size={56} color={COLORS.orangeLight} />
+        </View>
+        <Text style={styles.emptyText}>No recipes yet</Text>
+        <TouchableOpacity onPress={onExplore} activeOpacity={0.7}>
+          <Text style={styles.emptyLink}>Add your first one →</Text>
+        </TouchableOpacity>
       </View>
-      <Text style={styles.emptyText}>No recipes yet</Text>
-      <TouchableOpacity onPress={onExplore} activeOpacity={0.7}>
-        <Text style={styles.emptyLink}>Add your first one →</Text>
-      </TouchableOpacity>
     </View>
+
   );
 }

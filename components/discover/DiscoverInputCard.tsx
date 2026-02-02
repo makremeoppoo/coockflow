@@ -28,10 +28,12 @@ export default function DiscoverInputCard({
 }: DiscoverInputCardProps) {
   return (
     <View style={styles.discoverCard}>
-      <View style={styles.discoverIconWrap}>
-        <Ionicons name="link" size={22} color={COLORS.orange} />
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
+        <View style={styles.discoverIconWrap}>
+          <Ionicons name="link" size={22} color={COLORS.orange} />
+        </View>
+        <Text style={styles.discoverLabel}>Recipe Video URL</Text>
       </View>
-      <Text style={styles.discoverLabel}>Recipe Video URL</Text>
       <View style={styles.discoverInputRow}>
         <TextInput
           style={styles.discoverInput}

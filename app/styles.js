@@ -252,6 +252,24 @@ const styles = StyleSheet.create({
       fontWeight: '600',
       color: COLORS.orange,
     },
+
+    // Explore unlock CTA (pill)
+    exploreUnlockCta: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'flex-start',
+      backgroundColor: COLORS.orangeLight,
+      paddingHorizontal: 14,
+      paddingVertical: 10,
+      borderRadius: 20,
+      marginBottom: 14,
+      gap: 8,
+    },
+    exploreUnlockCtaText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: COLORS.orange,
+    },
   
     // ── GROCERY ──
     clearChecked: {

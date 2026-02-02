@@ -1,8 +1,18 @@
+import PaywallModal from "@/components/PaywallModal";
+import { COLORS } from "@/constants";
+import { usePremium } from "@/context/PremiumContext";
 import { useScrollToHideTabBar, useTabBarVisibility } from "@/context/TabBarVisibilityContext";
+import { appwriteConfig } from "@/lib/appwrite";
+import { canExtractFree, incrementFreeExtractions } from "@/lib/freeLimit";
+import {
+  extractRecipeWithGemini,
+  getVideoContent,
+} from "@/lib/recipeFromVideo";
+import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Alert, ScrollView } from "react-native";
+import { Alert, ScrollView, Text, TouchableOpacity } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import BackgroundPattern from "../../components/BackgroundPattern";
 import {
@@ -10,11 +20,6 @@ import {
   DiscoverPageHeader,
   DiscoverTipCard,
 } from "../../components/discover";
-import { appwriteConfig } from "../../lib/appwrite";
-import {
-  extractRecipeWithGemini,
-  getVideoContent,
-} from "../../lib/recipeFromVideo";
 import styles from "../styles";
 
 const HOW_IT_WORKS = [
@@ -33,6 +38,8 @@ const FEATURES = [
 export default function Discover() {
   const { onScroll } = useScrollToHideTabBar();
   const { setVisible } = useTabBarVisibility();
+  const { isPro } = usePremium();
+  const [showPaywall, setShowPaywall] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
   const [isExtracting, setIsExtracting] = useState(false);
   const [savedRecipes, setSavedRecipes] = useState<any[]>([]);
@@ -67,6 +74,12 @@ export default function Discover() {
       return;
     }
 
+    const { allowed } = await canExtractFree(isPro);
+    if (!allowed) {
+      setShowPaywall(true);
+      return;
+    }
+
     const apiKey =
       appwriteConfig.geminiApiKey ?? process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? "";
     if (!apiKey) {
@@ -98,6 +111,8 @@ export default function Discover() {
       await saveToStorage("recipes", updatedRecipes);
       setVideoUrl("");
 
+      if (!isPro) await incrementFreeExtractions();
+
       Alert.alert("Success! ✨", `"${recipe.title}" has been added to your recipes`);
     } catch (error) {
       console.error("Extraction error:", error);
@@ -107,7 +122,7 @@ export default function Discover() {
     } finally {
       setIsExtracting(false);
     }
-  }, [videoUrl, savedRecipes, saveToStorage]);
+  }, [videoUrl, savedRecipes, saveToStorage, isPro]);
 
   const extractDisabled = !videoUrl.trim() || isExtracting;
 
@@ -121,6 +136,19 @@ export default function Discover() {
       >
         <BackgroundPattern />
         <DiscoverPageHeader />
+
+        {!isPro && (
+          <TouchableOpacity
+            onPress={() => setShowPaywall(true)}
+            style={styles.exploreUnlockCta}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="sparkles" size={18} color={COLORS.orange} />
+            <Text style={styles.exploreUnlockCtaText}>
+              Unlock unlimited extractions →
+            </Text>
+          </TouchableOpacity>
+        )}
 
         <Animated.View
           entering={FadeInUp.duration(320).springify().damping(24).mass(0.7)}
@@ -145,6 +173,8 @@ export default function Discover() {
         >
           <DiscoverTipCard title="🎯 Features" items={FEATURES} />
         </Animated.View>
+
+        <PaywallModal visible={showPaywall} onClose={() => setShowPaywall(false)} />
     </ScrollView>
   );
 }
