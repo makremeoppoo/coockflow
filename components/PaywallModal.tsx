@@ -67,6 +67,7 @@ export default function PaywallModal({ visible, onClose }: PaywallModalProps) {
       await new Promise((r) => setTimeout(r, 800));
       const { entitlementActive } = await getCustomerInfo();
       if (success || entitlementActive) {
+        Alert.alert("Success! ✨", "Your purchase has been completed.");
         onClose();
       } else if (error && error !== "cancelled") {
         Alert.alert("Purchase failed", error);
