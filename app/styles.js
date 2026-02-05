@@ -1,4 +1,4 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { COLORS } from "../constants";
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
 // A single tiny spoon+fork unit drawn with Views, repeated in a grid
@@ -481,7 +481,7 @@ const styles = StyleSheet.create({
       borderTopWidth: 1,
       borderTopColor: COLORS.border,
       paddingVertical: 8,
-      paddingBottom: Platform.OS === 'ios' ? 20 : 10,
+      paddingBottom: 20,
     },
     navItem: {
       flex: 1,
