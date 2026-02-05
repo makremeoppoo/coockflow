@@ -1,5 +1,10 @@
+/** @format */
+
 import { COLORS, images } from "@/constants";
-import { TabBarVisibilityProvider, useTabBarVisibility } from "@/context/TabBarVisibilityContext";
+import {
+  TabBarVisibilityProvider,
+  useTabBarVisibility,
+} from "@/context/TabBarVisibilityContext";
 import { TabBarIconProps } from "@/type";
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
@@ -39,35 +44,38 @@ const TabBarIcon = ({ focused, icon, title }: TabBarIconProps) => {
           styles.navIconWrap,
           focused && styles.navIconWrapActive,
           { transform: [{ scale }] },
-        ]}
-      >
+        ]}>
         <Image
           source={icon}
           style={{ width: 24, height: 24 }}
-          resizeMode="contain"
+          resizeMode='contain'
           tintColor={focused ? COLORS.orange : COLORS.textMuted}
         />
       </Animated.View>
       <Text
         style={[styles.navLabel, focused && styles.navLabelActive]}
-        numberOfLines={1}
-      >
+        numberOfLines={1}>
         {title}
       </Text>
     </View>
   );
 };
 
+const TAB_BAR_BOTTOM = 36;
+
 const tabBarStyle = {
   borderTopLeftRadius: 24,
   borderTopRightRadius: 24,
+  borderBottomLeftRadius: 24,
+  borderBottomRightRadius: 24,
   marginHorizontal: 20,
+  marginBottom: 12,
   height: 72,
   position: "absolute" as const,
-  bottom: 28,
-  backgroundColor: COLORS.card,
+  bottom: TAB_BAR_BOTTOM,
+  backgroundColor: "rgba(255, 255, 255, 0.6)",
   borderTopWidth: 1,
-  borderTopColor: COLORS.border,
+  borderColor: "rgba(236, 236, 236, 0.6)",
   shadowColor: COLORS.text,
   shadowOffset: { width: 0, height: -2 },
   shadowOpacity: 0.06,
@@ -77,7 +85,7 @@ const tabBarStyle = {
   paddingTop: 8,
 };
 
-const TAB_BAR_HEIGHT = 72 + 28;
+const TAB_BAR_HEIGHT = 72 + TAB_BAR_BOTTOM;
 
 function TabLayoutContent() {
   const { visible, setVisible } = useTabBarVisibility();
@@ -109,8 +117,7 @@ function TabLayoutContent() {
         bottom: 0,
         height: TAB_BAR_HEIGHT + 20,
       }}
-      pointerEvents="box-none"
-    >
+      pointerEvents='box-none'>
       <Animated.View
         style={{
           position: "absolute",
@@ -119,8 +126,7 @@ function TabLayoutContent() {
           bottom: 0,
           transform: [{ translateY }],
         }}
-        pointerEvents={visible ? "auto" : "none"}
-      >
+        pointerEvents={visible ? "auto" : "none"}>
         <BottomTabBar {...props} />
       </Animated.View>
       <Animated.View
@@ -130,8 +136,7 @@ function TabLayoutContent() {
           bottom: FAB_BOTTOM,
           opacity: fabOpacity,
         }}
-        pointerEvents={visible ? "none" : "auto"}
-      >
+        pointerEvents={visible ? "none" : "auto"}>
         <TouchableOpacity
           onPress={() => setVisible(true)}
           activeOpacity={0.85}
@@ -147,9 +152,8 @@ function TabLayoutContent() {
             shadowOpacity: 0.2,
             shadowRadius: 8,
             elevation: 8,
-          }}
-        >
-          <Ionicons name="menu" size={28} color="#fff" />
+          }}>
+          <Ionicons name='menu' size={28} color='#fff' />
         </TouchableOpacity>
       </Animated.View>
     </View>
@@ -164,32 +168,39 @@ function TabLayoutContent() {
         tabBarActiveTintColor: COLORS.orange,
         tabBarInactiveTintColor: COLORS.textMuted,
       }}
-      tabBar={tabBar}
-    >
+      tabBar={tabBar}>
       <Tabs.Screen
-        name="index"
+        name='index'
         options={{
           title: "My Recipes",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon title="My Recipes" icon={images.home} focused={focused} />
+            <TabBarIcon
+              title='My Recipes'
+              icon={images.home}
+              focused={focused}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="search"
+        name='search'
         options={{
           title: "Grocery List",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon title="Grocery List" icon={images.bag} focused={focused} />
+            <TabBarIcon
+              title='Grocery List'
+              icon={images.bag}
+              focused={focused}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name='explore'
         options={{
           title: "Discover",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon title="Discover" icon={images.star} focused={focused} />
+            <TabBarIcon title='Discover' icon={images.star} focused={focused} />
           ),
         }}
       />

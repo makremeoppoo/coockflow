@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Cookflow",
-    "slug": "cookflow",
+    "slug": "Mobile",
     "version": "1.0.0",
     "description": "From \"I saw this\" to \"it's on the table.\" Turn recipe videos into saved recipes and grocery lists—so you actually cook what you've been meaning to make.",
     "orientation": "portrait",

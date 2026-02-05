@@ -27,7 +27,12 @@ function getApiKey(): string | null {
   return null;
 }
 
-export const revenueCatAvailable = Boolean(Purchases && (Platform.OS === "ios" || Platform.OS === "android"));
+/** True only when native SDK is present and an API key is set (so preview build without key runs without IAP). */
+export const revenueCatAvailable = Boolean(
+  Purchases &&
+  (Platform.OS === "ios" || Platform.OS === "android") &&
+  (Platform.OS === "ios" ? (process.env.EXPO_PUBLIC_REVENUECAT_API_KEY_APPLE ?? process.env.EXPO_PUBLIC_REVENUECAT_API_KEY) : (process.env.EXPO_PUBLIC_REVENUECAT_API_KEY_GOOGLE ?? process.env.EXPO_PUBLIC_REVENUECAT_API_KEY))
+);
 
 export async function configureRevenueCat(userId?: string): Promise<void> {
   if (!Purchases || !revenueCatAvailable) return;
