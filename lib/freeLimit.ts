@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const KEY_MONTH = "extractionsMonth";
 const KEY_COUNT = "extractionsCount";
-const FREE_LIMIT = 3;
+export const FREE_LIMIT = 3;
 
 function getCurrentMonth(): string {
   const d = new Date();

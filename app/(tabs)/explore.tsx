@@ -3,7 +3,7 @@ import { COLORS } from "@/constants";
 import { usePremium } from "@/context/PremiumContext";
 import { useScrollToHideTabBar, useTabBarVisibility } from "@/context/TabBarVisibilityContext";
 import { appwriteConfig } from "@/lib/appwrite";
-import { canExtractFree, incrementFreeExtractions } from "@/lib/freeLimit";
+import { canExtractFree, FREE_LIMIT, incrementFreeExtractions } from "@/lib/freeLimit";
 import {
   extractRecipeWithGemini,
   getVideoContent,
@@ -145,8 +145,8 @@ export default function Discover() {
           >
             <Ionicons name="sparkles" size={18} color={COLORS.orange} />
             <Text style={styles.exploreUnlockCtaText}>
-              Unlock unlimited extractions →
-            </Text>
+            Unlock unlimited extractions → {FREE_LIMIT} free extractions remaining
+          </Text>
           </TouchableOpacity>
         )}
 
